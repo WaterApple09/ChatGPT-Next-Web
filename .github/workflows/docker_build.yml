@@ -12,9 +12,26 @@ on:   # 配置触发workflow的事件
 
 jobs:  # workflow中的job
 
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run tests
+        run: |
+          if [ -f docker-compose.test.yml ]; then
+            docker-compose --file docker-compose.test.yml build
+            docker-compose --file docker-compose.test.yml run sut
+          else
+            docker build . --file Dockerfile
+          fi
+
   push_to_registry:  # job的名字
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest   # job运行的基础环境
+    needs: test
+
 
     steps:  # 一个job由一个或多个step组成
       - name: Check out the repo
@@ -30,7 +47,7 @@ jobs:  # workflow中的job
         id: meta
         uses: docker/metadata-action@v3  # 抽取项目信息，主要是镜像的tag
         with:
-          images: jhao104/proxy_pool
+          images: waterapple/chatgpt
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v2 # docker build & push
