@@ -11,7 +11,6 @@ on:   # 配置触发workflow的事件
 jobs:  # workflow中的job
 
   push_to_registry:  # job的名字
-    needs: test
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest   # job运行的基础环境
 
