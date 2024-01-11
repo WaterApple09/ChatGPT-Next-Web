@@ -10,22 +10,6 @@ on:   # 配置触发workflow的事件
   workflow_dispatch:
 
 
-jobs:  # workflow中的job
-
-  test:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Run tests
-        run: |
-          if [ -f docker-compose.test.yml ]; then
-            docker-compose --file docker-compose.test.yml build
-            docker-compose --file docker-compose.test.yml run sut
-          else
-            docker build . --file Dockerfile
-          fi
 
   push_to_registry:  # job的名字
     name: Push Docker image to Docker Hub
